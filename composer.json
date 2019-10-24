@@ -2,7 +2,7 @@
     "name": "aztec/form",
     "description": "A new way to manage forms on WordPress.",
     "type": "library",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "license": "GPL-2.0",
     "authors": [
         {
@@ -14,6 +14,11 @@
             "email": "lucas@aztecweb.net"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Aztec\\Form\\": "src/"
+        }
+    },
     "require": {
         "symfony/form": "^4.3"
     }
