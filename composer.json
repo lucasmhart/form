@@ -2,7 +2,7 @@
     "name": "aztec/form",
     "description": "A new way to manage forms on WordPress.",
     "type": "library",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "license": "GPL-2.0",
     "authors": [
         {
@@ -20,6 +20,8 @@
         }
     },
     "require": {
-        "symfony/form": "^4.3"
+        "symfony/form": "^4.3",
+        "symfony/twig-bridge": "^4.3",
+        "symfony/translation": "^4.3"
     }
 }
