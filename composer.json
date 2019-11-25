@@ -2,7 +2,7 @@
     "name": "aztec/form",
     "description": "A new way to manage forms on WordPress.",
     "type": "library",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "license": "GPL-2.0",
     "authors": [
         {

@@ -1,4 +1,5 @@
 <?php
+
 namespace Aztec\Form;
 
 use Aztec\Form\Classes\Form as AztecForm;
@@ -60,11 +61,81 @@ class Form
                 'id' => 'my_id'
             ]
         ]);
-        
+
         $context = [
             'form' => $form->createView(),
         ];
 
-        return $twig->render('row.html.twig', $context);
+        $input =  $twig->render('row.html.twig', $context);
+        
+        $args = array(
+            'field_id' => 'myprefix_setting-id-4',
+            'field_title' => 'Field Title',
+            'field_render' => 'field_render',
+            'group' => 'general',
+            'label' => 'Field title',
+            'sanitize_callback' => 'sanitize_text_field',
+            'validation_callback' => 'some_validation_function',
+            'description' => 'Field description',
+            'default_value' => 'Default',
+            'wrapper_class' => 'field-wrapper-class'
+        );
+        
+        add_action('admin_init', function() use ($args){
+            add_settings_field(
+                $args['field_id'],
+                $args['field_title'],
+                function() use ($args){
+                    echo '<input
+                        name="'. $args['field_id'] .'"
+                        type="email"
+                        id="'. $args['field_id'] .'"
+                        value="' . get_option($args['field_id']) . '"
+                        class="regular-text ltr"
+                        >';
+                },
+                $args['group'],
+                'default',
+                $args
+            );
+        });
+
+        // /** ------------------------------------------------------ */
+        // $field_id = 'general';
+        // $group = 'myprefix_setting-id-4';
+        // $args = array(
+        //     'label' => "Field title",
+        //     'sanitize_callback' => 'sanitize_text_field',
+        //     'validation_callback' => 'some_validation_function',
+        //     'description' => 'Field description',
+        //     'default_value' => 'Default',
+        //     'wrapper_class' => 'field-wrapper-class'
+        // );
+        // add_action('admin_init', function () use ($field_id, $group, $args, $input) {
+        //     register_setting($group, $field_id, [
+        //         'type' => 'string',
+        //         'sanitize_callback' => $args['sanitize_callback'],
+        //         'description' => $args['description'],
+        //         'show_in_rest' => true,
+        //         'default' => $args['default_value'],
+        //     ]);
+
+        //     add_settings_field(
+        //         $field_id,
+        //         $args['label'],
+        //         $input,
+        //         $group,
+        //         'default',
+        //         array(
+        //             'field_id' => $field_id,
+        //             'label_for' => $field_id,
+        //             'wrapper_class' => $args['wrapper_class'],
+        //         )
+        //     );
+
+        //     if (isset($_POST)) {
+        //         ErrorNotice::render($field_id, 'Notice error render');
+        //     }
+        // });
     }
 }
