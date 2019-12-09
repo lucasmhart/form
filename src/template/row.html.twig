@@ -1,12 +1,4 @@
-{% if formOpen %}
-    {{ form_start(form) }}
-{%- endif -%}
 
-{{ 
-    form_row(form.task) 
-}}
-
-
-{% if formOpen %}
-    {{ form_end(form) }}
-{%- endif -%}
+{% for child in form|filter(child => not child.rendered) %}
+    {{- form_row(child) -}}
+{% endfor %}
