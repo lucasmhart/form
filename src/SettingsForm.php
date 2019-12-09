@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class SettingsForm
 {
     /**
-     * Function to add field to form
+     * Function to add input to form
      * 
      * @param string    $group
      * @param string    $field_id
@@ -57,6 +57,14 @@ class SettingsForm
         });
     }
 
+    /**
+     * Function to add select to form
+     * 
+     * @param string    $group
+     * @param string    $field_id
+     * @param mixed     $type
+     * @param array     $args     
+     */
     public static function select( $group, $field_id, $type, $args )
     {
         add_action( 'admin_init', function() use ( $group, $field_id, $type, $args ){
@@ -65,6 +73,7 @@ class SettingsForm
                 $field_id,
                 $args['field_title'],
                 function() use ( $field_id, $type, $args ){
+                   
                     $twig = new Twig();
                     $form = new AztecForm();
 
@@ -79,12 +88,11 @@ class SettingsForm
                     $form->add( $field_id, $type, [
                         'required' => $required,
                         'placeholder' => $args['placeholder'],
-                        'data' => '2',
-                        'empty_data' => '2',
                         'attr' => [
                             'class' => $class,
                         ],
                         'choices' => $args['choices'],
+                        'data' => $args['default_value'],
                     ] );
             
                     $context = [
@@ -99,4 +107,5 @@ class SettingsForm
             );
         });
     }
+
 }
