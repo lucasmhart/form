@@ -81,6 +81,7 @@ class SettingsForm
 
                     $required = isset( $args['required'] ) ? $args['required'] : false;
                     $class = isset( $args['wrapper_class'] ) ? $args['wrapper_class'] : '';
+                    $expanded = isset( $args['expanded'] ) ? $args['expanded'] : false;
                     
                     $default_value = get_option( $field_id );
                     if( empty( $default_value ) ) {
@@ -95,6 +96,7 @@ class SettingsForm
                         ],
                         'choices' => $args['choices'],
                         'data' => $default_value,
+                        'expanded' => $expanded
                     ] );
             
                     $context = [
@@ -182,7 +184,7 @@ class SettingsForm
             add_settings_field(
                 $field_id,
                 $args['field_title'],
-                function() use ( $field_id, $type, $args ){
+                function() use ( $type, $args ){
                     $twig = new Twig();
                     $form = new AztecForm();
 
@@ -218,6 +220,20 @@ class SettingsForm
                 $args
             );
         });
+    }
+
+    /**
+     * Function to add checkbox to form
+     * 
+     * @param string    $group
+     * @param string    $field_id
+     * @param mixed     $type
+     * @param array     $args     
+     */
+    public static function radio( $group, $field_id, $type, $args )
+    {        
+        $args['expanded'] = true;
+        self::select( $group, $field_id, $type, $args );
     }
 
 }
