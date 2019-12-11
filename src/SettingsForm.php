@@ -22,7 +22,7 @@ class SettingsForm
     public static function text( $group, $field_id, $type, $args )
     {        
         add_action( 'admin_init', function() use ( $group, $field_id, $type, $args ){
-            register_setting( $group, $field_id, 'esc_attr');
+            register_setting( $group, $field_id, 'esc_attr' );
             add_settings_field(
                 $field_id,
                 $args['field_title'],
@@ -70,7 +70,7 @@ class SettingsForm
     public static function select( $group, $field_id, $type, $args )
     {
         add_action( 'admin_init', function() use ( $group, $field_id, $type, $args ){
-            register_setting( $group, $field_id, 'esc_attr');
+            register_setting( $group, $field_id, 'esc_attr' );
             add_settings_field(
                 $field_id,
                 $args['field_title'],
@@ -94,7 +94,7 @@ class SettingsForm
                             'class' => $class,
                         ],
                         'choices' => $args['choices'],
-                        'data' => $args['default_value'],
+                        'data' => $default_value,
                     ] );
             
                     $context = [
@@ -111,7 +111,7 @@ class SettingsForm
     }
 
     /**
-     * Function to add input to form
+     * Function to add date input to form
      * 
      * @param string    $group
      * @param string    $field_id
@@ -121,7 +121,7 @@ class SettingsForm
     public static function date( $group, $field_id, $type, $args )
     {        
         add_action( 'admin_init', function() use ( $group, $field_id, $type, $args ){
-            register_setting( $group, $field_id, 'esc_attr');
+            register_setting( $group, $field_id, 'esc_attr' );
             add_settings_field(
                 $field_id,
                 $args['field_title'],
@@ -148,6 +148,56 @@ class SettingsForm
                         ],
                         'widget' => 'single_text',
                         'input'  => 'datetime_immutable'
+                    ] );
+            
+                    $context = [
+                        'form' => $form->createView(),
+                    ];
+            
+                    echo  $twig->render( 'row.html.twig', $context );
+                },
+                $group,
+                'default',
+                $args
+            );
+        });
+    }
+
+    /**
+     * Function to add checkbox to form
+     * 
+     * @param string    $group
+     * @param string    $field_id
+     * @param mixed     $type
+     * @param array     $args     
+     */
+    public static function checkbox( $group, $field_id, $type, $args )
+    {        
+        add_action( 'admin_init', function() use ( $group, $field_id, $type, $args ){
+            register_setting( $group, $field_id, 'esc_attr' );
+            add_settings_field(
+                $field_id,
+                $args['field_title'],
+                function() use ( $field_id, $type, $args ){
+                    $twig = new Twig();
+                    $form = new AztecForm();
+
+                    $required = isset( $args['required'] ) ? $args['required'] : false;
+                    $class = isset( $args['wrapper_class'] ) ? $args['wrapper_class'] : '';
+                    
+                    $default_value = get_option( $field_id );
+
+                    if( empty( $default_value ) ) {
+                        $default_value = isset( $args['default_value'] ) ? $args['default_value'] : false;
+                    }
+
+                    $form->add( $field_id, $type, [
+                        'required' => $required,
+                        'label' => $args['label'],
+                        'attr' => [
+                            'class' => $class,
+                            'checked' => $default_value
+                        ],
                     ] );
             
                     $context = [

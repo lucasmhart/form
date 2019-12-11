@@ -10,6 +10,12 @@
     {% endfor %}
 {%- endblock form_rows -%}
 
+{%- block checkbox_widget -%}
+    <label for="{{ name }}">
+        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} /> {{ label }}
+    </label>
+{%- endblock checkbox_widget -%}
+
 {%- block form -%}
     {{ form_start(form) }}
         {{- form_widget(form) -}}
