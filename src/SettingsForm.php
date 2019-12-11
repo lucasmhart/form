@@ -174,7 +174,11 @@ class SettingsForm
     public static function checkbox( $group, $field_id, $type, $args )
     {        
         add_action( 'admin_init', function() use ( $group, $field_id, $type, $args ){
-            register_setting( $group, $field_id, 'esc_attr' );
+            
+            foreach( $args['choices'] as $choice ) {
+                register_setting( $group, $choice['name'], 'esc_attr' );
+            }
+            
             add_settings_field(
                 $field_id,
                 $args['field_title'],
@@ -185,20 +189,23 @@ class SettingsForm
                     $required = isset( $args['required'] ) ? $args['required'] : false;
                     $class = isset( $args['wrapper_class'] ) ? $args['wrapper_class'] : '';
                     
-                    $default_value = get_option( $field_id );
+                    foreach( $args['choices'] as $choice ) {
+                        $field = $choice['name'];
+                        $default_value = get_option( $field );
+    
+                        if( empty( $default_value ) ) {
+                            $default_value = isset( $args['default_value'] ) ? $args['default_value'] : false;
+                        }
 
-                    if( empty( $default_value ) ) {
-                        $default_value = isset( $args['default_value'] ) ? $args['default_value'] : false;
+                        $form->add( $field , $type, [
+                            'required' => $required,
+                            'label' => $choice['label'],
+                            'attr' => [
+                                'class' => $class,
+                                'checked' => $default_value
+                            ],
+                        ] );
                     }
-
-                    $form->add( $field_id, $type, [
-                        'required' => $required,
-                        'label' => $args['label'],
-                        'attr' => [
-                            'class' => $class,
-                            'checked' => $default_value
-                        ],
-                    ] );
             
                     $context = [
                         'form' => $form->createView(),
